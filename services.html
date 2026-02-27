@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services — Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&family=Barlow+Condensed:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1a1a1a;
+            --accent-color: #FF3D00;
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; top: 0; left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 4rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .nav-links { display: flex; gap: 3rem; align-items: center; }
+
+        .nav-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none; border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem; cursor: none;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 4rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            bottom: 30%; left: 10%;
+            width: 350px; height: 350px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.08) 0%, transparent 70%);
+            animation: pulse 7s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .hero-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            position: relative; z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.3s forwards;
+        }
+
+        .hero-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(5rem, 18vw, 13rem);
+            font-weight: 800;
+            line-height: 0.88;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            position: relative; z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.5s forwards;
+        }
+
+        .hero-headline .outline {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+            color: transparent;
+        }
+
+        .hero-sub {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative; z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.8s forwards;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            max-width: 420px;
+            font-weight: 300;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-strip {
+            background: var(--accent-color);
+            padding: 0.75rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-track {
+            display: inline-flex;
+            animation: marquee 20s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: #000;
+            padding: 0 2rem;
+        }
+
+        .marquee-dot { color: rgba(0,0,0,0.35); }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        /* ── SECTION LABEL ── */
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 3rem;
+        }
+
+        /* ── SERVICES LIST (Frame Rebel style) ── */
+        .services-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 4rem;
+        }
+
+        .services-list {
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .service-row {
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            align-items: start;
+            padding: 3rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            gap: 3rem;
+            cursor: none;
+            transition: background 0.3s;
+            position: relative;
+        }
+
+        .service-row:hover { background: rgba(255,255,255,0.015); }
+
+        .service-row:hover .service-num { color: var(--accent-color); }
+
+        .service-row:hover .service-arrow { transform: translateX(8px); opacity: 1; }
+
+        .service-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            transition: color 0.3s;
+            padding-top: 0.5rem;
+        }
+
+        .service-content {}
+
+        .service-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .service-desc {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            max-width: 600px;
+            font-weight: 300;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+        }
+
+        .service-tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            padding: 0.3rem 0.75rem;
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text-secondary);
+        }
+
+        .service-arrow {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            opacity: 0;
+            transition: all 0.3s;
+            padding-top: 0.75rem;
+        }
+
+        /* ── HOW WE WORK ACCORDION ── */
+        .process-section {
+            background: var(--bg-dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .process-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 4rem;
+        }
+
+        .process-header-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .process-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+
+        .process-headline .outline {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+            color: transparent;
+        }
+
+        .process-sub {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            max-width: 360px;
+        }
+
+        .accordion {
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            overflow: hidden;
+        }
+
+        .accordion-trigger {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            align-items: center;
+            gap: 2rem;
+            padding: 2.5rem 0;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: none;
+            text-align: left;
+            transition: background 0.3s;
+        }
+
+        .accordion-trigger:hover { background: rgba(255,255,255,0.015); }
+
+        .acc-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--accent-color);
+        }
+
+        .acc-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .acc-icon {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            transition: transform 0.35s ease;
+            line-height: 1;
+            width: 24px;
+            text-align: center;
+        }
+
+        .accordion-item.open .acc-icon {
+            transform: rotate(45deg);
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .accordion-item.open .accordion-body {
+            max-height: 400px;
+        }
+
+        .accordion-content {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        .acc-spacer {}
+
+        .acc-body-text {
+            font-size: 1.05rem;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 700px;
+        }
+
+        .acc-deliverables {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .acc-deliverable {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            padding: 0.3rem 0.75rem;
+            border: 1px solid rgba(255,61,0,0.3);
+            color: var(--accent-color);
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        .cta-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            background: var(--accent-color);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover { background: #fff; transform: translateY(-3px); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--bg-darker);
+            padding: 3rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        /* ── PRELOADER ── */
+        #preloader {
+            position: fixed; inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            clip-path: inset(0 0 0 0);
+            transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.2s;
+        }
+
+        #preloader.done { clip-path: inset(0 0 100% 0); pointer-events: none; }
+
+        .preloader-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            letter-spacing: 0.6em;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: plFade 0.6s ease 0.3s forwards;
+        }
+
+        .preloader-line {
+            width: 180px; height: 1px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden; margin-bottom: 1rem;
+        }
+
+        .preloader-fill {
+            height: 100%; width: 0%;
+            background: var(--accent-color);
+            transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        .preloader-count {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.3);
+        }
+
+        @keyframes plFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CURSOR ── */
+        .cursor-dot {
+            width: 6px; height: 6px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-ring {
+            width: 38px; height: 38px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
+                        height 0.35s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.35s;
+        }
+
+        .cursor-ring.hover {
+            width: 60px; height: 60px;
+            border-color: var(--accent-color);
+            opacity: 0.6;
+        }
+
+        a, button { cursor: none; }
+
+        @media (hover: none) {
+            .cursor-dot, .cursor-ring { display: none; }
+            body, a, button { cursor: auto; }
+        }
+
+        /* ── REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 968px) {
+            nav { padding: 1rem 1.5rem; }
+
+            .nav-links {
+                position: fixed;
+                top: 70px; left: 0; right: 0;
+                background: rgba(0,0,0,0.98);
+                flex-direction: column;
+                gap: 1.5rem; padding: 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                transform: translateY(-110%); opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s;
+            }
+
+            .nav-links.open {
+                transform: translateY(0); opacity: 1;
+                pointer-events: all;
+            }
+
+            .mobile-menu-toggle { display: block; }
+
+            .hero, .services-section, .process-inner, .cta-section {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .hero { padding-bottom: 4rem; }
+
+            .service-row {
+                grid-template-columns: 50px 1fr;
+                gap: 1.5rem;
+            }
+
+            .service-arrow { display: none; }
+
+            .accordion-trigger {
+                grid-template-columns: 50px 1fr auto;
+                gap: 1rem;
+            }
+
+            .accordion-content {
+                grid-template-columns: 1fr;
+            }
+
+            .process-header-row { flex-direction: column; align-items: flex-start; }
+
+            footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-logo">ARCHIVE</div>
+        <div class="preloader-line"><div class="preloader-fill" id="preloaderFill"></div></div>
+        <div class="preloader-count" id="preloaderCount">0</div>
+    </div>
+
+    <!-- Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Nav -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="portfolio.html" class="nav-link">PORTFOLIO</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="services.html" class="nav-link active">SERVICES</a>
+                <a href="index.html#blog" class="nav-link">INSIGHTS</a>
+                <a href="contact.html" class="nav-link">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-glow"></div>
+
+        <div class="hero-eyebrow">WHAT WE DO</div>
+
+        <h1 class="hero-headline">
+            <span>OUR</span>
+            <span class="outline">SERVICES.</span>
+        </h1>
+
+        <div class="hero-sub">
+            <p class="hero-desc">
+                Six core disciplines. One mission — to make your brand the most compelling thing in the room.
+            </p>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-strip">
+        <div class="marquee-track">
+            <span class="marquee-item">VIDEO PRODUCTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">PHOTOGRAPHY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">BRAND IDENTITY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">SOCIAL MEDIA <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE DIRECTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">MOTION GRAPHICS <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">VIDEO PRODUCTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">PHOTOGRAPHY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">BRAND IDENTITY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">SOCIAL MEDIA <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE DIRECTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">MOTION GRAPHICS <span class="marquee-dot">◆</span></span>
+        </div>
+    </div>
+
+    <!-- Services List -->
+    <section class="services-section">
+        <div class="section-label reveal">WHAT WE DO</div>
+
+        <div class="services-list reveal">
+
+            <div class="service-row">
+                <span class="service-num">01</span>
+                <div class="service-content">
+                    <h2 class="service-title">Video Production</h2>
+                    <p class="service-desc">
+                        From concept to final cut, we produce cinematic content that stops thumbs and opens wallets. Brand films, campaign reels, short-form social content, and documentary-style storytelling — all built to convert.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">BRAND FILMS</span>
+                        <span class="service-tag">REELS & SHORTS</span>
+                        <span class="service-tag">DOCUMENTARIES</span>
+                        <span class="service-tag">CAMPAIGN VIDEO</span>
+                        <span class="service-tag">PRODUCT VIDEO</span>
+                    </div>
+                </div>
+                <span class="service-arrow">→</span>
+            </div>
+
+            <div class="service-row">
+                <span class="service-num">02</span>
+                <div class="service-content">
+                    <h2 class="service-title">Photography</h2>
+                    <p class="service-desc">
+                        Still imagery that speaks volumes. Editorial portraiture, product photography, event coverage, and campaign shoots — all captured with an eye for light, mood, and the moment that matters most.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">EDITORIAL</span>
+                        <span class="service-tag">PRODUCT SHOOTS</span>
+                        <span class="service-tag">PORTRAITURE</span>
+                        <span class="service-tag">EVENT COVERAGE</span>
+                        <span class="service-tag">CAMPAIGN IMAGES</span>
+                    </div>
+                </div>
+                <span class="service-arrow">→</span>
+            </div>
+
+            <div class="service-row">
+                <span class="service-num">03</span>
+                <div class="service-content">
+                    <h2 class="service-title">Brand Identity</h2>
+                    <p class="service-desc">
+                        Your brand is more than a logo — it's a feeling. We build complete visual identities from the ground up: logos, typography, colour systems, brand guidelines, and everything in between.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">LOGO DESIGN</span>
+                        <span class="service-tag">VISUAL SYSTEMS</span>
+                        <span class="service-tag">BRAND GUIDELINES</span>
+                        <span class="service-tag">TYPOGRAPHY</span>
+                        <span class="service-tag">COLOUR STRATEGY</span>
+                    </div>
+                </div>
+                <span class="service-arrow">→</span>
+            </div>
+
+            <div class="service-row">
+                <span class="service-num">04</span>
+                <div class="service-content">
+                    <h2 class="service-title">Social Media Content</h2>
+                    <p class="service-desc">
+                        Content built for the algorithm, designed for humans. We create thumb-stopping social content — from 60-piece monthly packages to one-off viral campaigns — tailored for every platform.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">INSTAGRAM</span>
+                        <span class="service-tag">TIKTOK</span>
+                        <span class="service-tag">YOUTUBE</span>
+                        <span class="service-tag">CONTENT STRATEGY</span>
+                        <span class="service-tag">MONTHLY PACKAGES</span>
+                    </div>
+                </div>
+                <span class="service-arrow">→</span>
+            </div>
+
+            <div class="service-row">
+                <span class="service-num">05</span>
+                <div class="service-content">
+                    <h2 class="service-title">Creative Direction</h2>
+                    <p class="service-desc">
+                        The vision behind the vision. Our creative directors bring strategic oversight to every shoot, campaign, and content series — ensuring everything looks, feels, and performs like a cohesive brand statement.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">CAMPAIGN CONCEPTING</span>
+                        <span class="service-tag">ART DIRECTION</span>
+                        <span class="service-tag">MOOD BOARDS</span>
+                        <span class="service-tag">SHOOT DIRECTION</span>
+                    </div>
+                </div>
+                <span class="service-arrow">→</span>
+            </div>
+
+            <div class="service-row">
+                <span class="service-num">06</span>
+                <div class="service-content">
+                    <h2 class="service-title">Motion Graphics</h2>
+                    <p class="service-desc">
+                        Animation and motion design that brings your brand to life. Title sequences, animated logos, lower thirds, transitions, and full motion identity systems for video content and digital platforms.
+                    </p>
+                    <div class="service-tags">
+                        <span class="service-tag">ANIMATED LOGOS</span>
+                        <span class="service-tag">TITLE SEQUENCES</span>
+                        <span class="service-tag">LOWER THIRDS</span>
+                        <span class="service-tag">TRANSITIONS</span>
+                        <span class="service-tag">MOTION IDENTITY</span>
+                    </div>
+                </div>
+                <span class="service-arrow">→</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How We Work -->
+    <section class="process-section">
+        <div class="process-inner">
+            <div class="process-header-row reveal">
+                <div>
+                    <div class="section-label">HOW WE WORK</div>
+                    <h2 class="process-headline">
+                        <span>OUR</span><br>
+                        <span class="outline">PROCESS.</span>
+                    </h2>
+                </div>
+                <p class="process-sub">
+                    A clear, collaborative process built to get the best out of every project — from the first call to the final deliverable.
+                </p>
+            </div>
+
+            <div class="accordion reveal">
+
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false">
+                        <span class="acc-num">01</span>
+                        <span class="acc-title">Discovery & Brief</span>
+                        <span class="acc-icon">+</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-content">
+                            <div class="acc-spacer"></div>
+                            <div>
+                                <p class="acc-body-text">
+                                    Every great project starts with understanding. We begin with a deep-dive discovery call where we get into your brand, your audience, your goals, and the brief. We ask the questions most agencies skip — because the best creative comes from genuine understanding, not assumptions.
+                                    <br><br>
+                                    This phase ends with a clear creative brief that both sides align on before a single camera is picked up or a design file is opened.
+                                </p>
+                                <div class="acc-deliverables">
+                                    <span class="acc-deliverable">DISCOVERY CALL</span>
+                                    <span class="acc-deliverable">CREATIVE BRIEF</span>
+                                    <span class="acc-deliverable">SCOPE OF WORK</span>
+                                    <span class="acc-deliverable">TIMELINE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false">
+                        <span class="acc-num">02</span>
+                        <span class="acc-title">Concept & Strategy</span>
+                        <span class="acc-icon">+</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-content">
+                            <div class="acc-spacer"></div>
+                            <div>
+                                <p class="acc-body-text">
+                                    We develop the creative concept — the big idea that everything else is built around. This includes mood boards, shot lists, visual references, and a clear creative strategy. We present this to you before anything goes into production, so you know exactly what you're getting.
+                                    <br><br>
+                                    You give feedback. We refine. Then we lock it in.
+                                </p>
+                                <div class="acc-deliverables">
+                                    <span class="acc-deliverable">MOOD BOARDS</span>
+                                    <span class="acc-deliverable">CREATIVE CONCEPT</span>
+                                    <span class="acc-deliverable">VISUAL REFERENCES</span>
+                                    <span class="acc-deliverable">SHOT LIST</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false">
+                        <span class="acc-num">03</span>
+                        <span class="acc-title">Production</span>
+                        <span class="acc-icon">+</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-content">
+                            <div class="acc-spacer"></div>
+                            <div>
+                                <p class="acc-body-text">
+                                    This is where ideas become reality. Whether we're on set filming, out on location shooting, or deep in design files building a brand system — production is where we pour in everything. Our team is obsessive about quality at every stage, from lighting setups to colour grading.
+                                    <br><br>
+                                    We keep you in the loop throughout, sharing progress and flagging decisions that need your input.
+                                </p>
+                                <div class="acc-deliverables">
+                                    <span class="acc-deliverable">FILMING / PHOTOGRAPHY</span>
+                                    <span class="acc-deliverable">DESIGN EXECUTION</span>
+                                    <span class="acc-deliverable">PROGRESS UPDATES</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <button class="accordion-trigger" aria-expanded="false">
+                        <span class="acc-num">04</span>
+                        <span class="acc-title">Delivery & Support</span>
+                        <span class="acc-icon">+</span>
+                    </button>
+                    <div class="accordion-body">
+                        <div class="accordion-content">
+                            <div class="acc-spacer"></div>
+                            <div>
+                                <p class="acc-body-text">
+                                    Final deliverables land in your hands, formatted and optimised for every platform you need. Two rounds of revisions are included in every project — because we want you to be genuinely proud of what we've made together.
+                                    <br><br>
+                                    We don't disappear after delivery. We're available for support, future projects, and ongoing content partnerships.
+                                </p>
+                                <div class="acc-deliverables">
+                                    <span class="acc-deliverable">FINAL FILES</span>
+                                    <span class="acc-deliverable">2 REVISION ROUNDS</span>
+                                    <span class="acc-deliverable">PLATFORM FORMATS</span>
+                                    <span class="acc-deliverable">ONGOING SUPPORT</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-label reveal">READY?</div>
+        <h2 class="cta-headline reveal">Start your<br>project today.</h2>
+        <a href="contact.html" class="btn-primary reveal">LET'S TALK →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-text">© 2026 ARCHIVE — ALL RIGHTS RESERVED</span>
+        <span class="footer-text">CREATIVE MEDIA COMPANY</span>
+    </footer>
+
+    <script>
+        // ── PRELOADER ──
+        const preloaderEl = document.getElementById('preloader');
+        const fillEl = document.getElementById('preloaderFill');
+        const countEl = document.getElementById('preloaderCount');
+        setTimeout(() => { fillEl.style.width = '100%'; }, 50);
+        let prog = 0;
+        const ticker = setInterval(() => {
+            prog += Math.floor(Math.random() * 12) + 3;
+            if (prog >= 100) {
+                prog = 100;
+                clearInterval(ticker);
+                setTimeout(() => preloaderEl.classList.add('done'), 350);
+            }
+            countEl.textContent = prog;
+        }, 80);
+
+        // ── CURSOR ──
+        const dot = document.getElementById('cursorDot');
+        const ring = document.getElementById('cursorRing');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px';
+            dot.style.top  = my + 'px';
+        });
+        (function follow() {
+            rx += (mx - rx) * 0.1;
+            ry += (my - ry) * 0.1;
+            ring.style.left = rx + 'px';
+            ring.style.top  = ry + 'px';
+            requestAnimationFrame(follow);
+        })();
+        document.querySelectorAll('a, button, .service-row').forEach(el => {
+            el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+            el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+
+        // ── MOBILE NAV ──
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('open');
+        });
+
+        // ── ACCORDION ──
+        document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.closest('.accordion-item');
+                const isOpen = item.classList.contains('open');
+
+                // Close all
+                document.querySelectorAll('.accordion-item').forEach(i => {
+                    i.classList.remove('open');
+                    i.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
+                });
+
+                // Open clicked (if it was closed)
+                if (!isOpen) {
+                    item.classList.add('open');
+                    trigger.setAttribute('aria-expanded', 'true');
+                }
+            });
+        });
+
+        // ── SCROLL REVEAL ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

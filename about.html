@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who We Are — Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600i&family=Barlow+Condensed:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1a1a1a;
+            --accent-color: #FF3D00;
+            --accent-glow: rgba(255, 61, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 4rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .nav-links { display: flex; gap: 3rem; align-items: center; }
+
+        .nav-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none; border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem; cursor: none;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 4rem 5rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-darker);
+        }
+
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 20%; right: 8%;
+            width: 400px; height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.1) 0%, transparent 70%);
+            animation: glowPulse 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        .hero-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            position: relative; z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.3s forwards;
+        }
+
+        .hero-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(5rem, 18vw, 13rem);
+            font-weight: 800;
+            line-height: 0.88;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            position: relative; z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.5s forwards;
+        }
+
+        .hero-headline .outline {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+            color: transparent;
+        }
+
+        .hero-sub {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative; z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.8s forwards;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            max-width: 420px;
+            font-weight: 300;
+        }
+
+        .hero-year {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-strip {
+            background: var(--accent-color);
+            padding: 0.75rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-track {
+            display: inline-flex;
+            animation: marquee 22s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: #000;
+            padding: 0 2rem;
+        }
+
+        .marquee-dot { color: rgba(0,0,0,0.35); }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        /* ── SECTIONS ── */
+        .section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 8rem 4rem;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        /* ── MISSION ── */
+        .mission-section {
+            padding: 8rem 4rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .mission-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 6rem;
+            align-items: start;
+        }
+
+        .mission-quote {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            line-height: 1.25;
+            font-style: italic;
+            color: var(--text-primary);
+        }
+
+        .mission-quote em {
+            font-style: normal;
+            color: var(--accent-color);
+        }
+
+        .mission-body p {
+            font-size: 1.15rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+
+        .mission-body p:last-child { margin-bottom: 0; }
+
+        /* ── VALUES ── */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.05);
+            margin-top: 4rem;
+        }
+
+        .value-card {
+            background: var(--bg-darker);
+            padding: 3rem 2.5rem;
+            position: relative;
+            transition: background 0.4s ease;
+        }
+
+        .value-card:hover { background: #0f0f0f; }
+
+        .value-num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: rgba(255,61,0,0.15);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            transition: color 0.4s;
+        }
+
+        .value-card:hover .value-num { color: rgba(255,61,0,0.4); }
+
+        .value-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .value-desc {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* ── STATS ── */
+        .stats-section {
+            background: var(--bg-dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stats-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 4rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .stat-block {
+            background: var(--bg-dark);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-num span { color: var(--accent-color); }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: var(--text-secondary);
+        }
+
+        /* ── STORY ── */
+        .story-section {
+            padding: 8rem 4rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .story-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+
+        .story-text h2 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 0.95;
+            margin-bottom: 2.5rem;
+        }
+
+        .story-text p {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: var(--text-secondary);
+            font-weight: 300;
+            margin-bottom: 1.25rem;
+        }
+
+        .story-visual {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            background: var(--accent);
+            overflow: hidden;
+        }
+
+        .story-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.7) saturate(0.8);
+            transition: transform 0.6s ease;
+        }
+
+        .story-visual:hover .story-img { transform: scale(1.04); }
+
+        .story-visual-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+        }
+
+        .story-caption {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            background: var(--bg-dark);
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        .cta-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            background: var(--accent-color);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover { background: #fff; transform: translateY(-3px); }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--bg-darker);
+            padding: 3rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        /* ── PRELOADER ── */
+        #preloader {
+            position: fixed; inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            clip-path: inset(0 0 0 0);
+            transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.2s;
+        }
+
+        #preloader.done { clip-path: inset(0 0 100% 0); pointer-events: none; }
+
+        .preloader-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            letter-spacing: 0.6em;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: plFade 0.6s ease 0.3s forwards;
+        }
+
+        .preloader-line {
+            width: 180px; height: 1px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden; margin-bottom: 1rem;
+        }
+
+        .preloader-fill {
+            height: 100%; width: 0%;
+            background: var(--accent-color);
+            transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        .preloader-count {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.3);
+        }
+
+        @keyframes plFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CURSOR ── */
+        .cursor-dot {
+            width: 6px; height: 6px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-ring {
+            width: 38px; height: 38px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
+                        height 0.35s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.35s;
+        }
+
+        .cursor-ring.hover {
+            width: 60px; height: 60px;
+            border-color: var(--accent-color);
+            opacity: 0.6;
+        }
+
+        a, button { cursor: none; }
+
+        @media (hover: none) {
+            .cursor-dot, .cursor-ring { display: none; }
+            body, a, button { cursor: auto; }
+        }
+
+        /* ── SCROLL ANIMATIONS ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 968px) {
+            nav { padding: 1rem 1.5rem; }
+
+            .nav-links {
+                position: fixed;
+                top: 70px; left: 0; right: 0;
+                background: rgba(0,0,0,0.98);
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                transform: translateY(-110%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s;
+            }
+
+            .nav-links.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .mobile-menu-toggle { display: block; }
+
+            .hero { padding: 0 1.5rem 4rem; }
+
+            .mission-inner, .story-inner {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .values-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
+
+            .section, .mission-section, .story-section, .cta-section {
+                padding: 5rem 1.5rem;
+            }
+
+            footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+        }
+
+        @media (max-width: 580px) {
+            .values-grid { grid-template-columns: 1fr; }
+            .stats-inner { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-logo">ARCHIVE</div>
+        <div class="preloader-line"><div class="preloader-fill" id="preloaderFill"></div></div>
+        <div class="preloader-count" id="preloaderCount">0</div>
+    </div>
+
+    <!-- Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- Nav -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="portfolio.html" class="nav-link">PORTFOLIO</a>
+                <a href="about.html" class="nav-link active">ABOUT</a>
+                <a href="services.html" class="nav-link">SERVICES</a>
+                <a href="index.html#blog" class="nav-link">INSIGHTS</a>
+                <a href="contact.html" class="nav-link">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-grid"></div>
+        <div class="hero-glow"></div>
+
+        <div class="hero-eyebrow">ABOUT US</div>
+
+        <h1 class="hero-headline">
+            <span>WHO</span>
+            <span class="outline">WE ARE.</span>
+        </h1>
+
+        <div class="hero-sub">
+            <p class="hero-desc">
+                A creative media company built on the belief that bold storytelling changes how the world sees brands.
+            </p>
+            <span class="hero-year">EST. 2024</span>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-strip">
+        <div class="marquee-track">
+            <span class="marquee-item">CREATIVE <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">BOLD <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">INTENTIONAL <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">AUTHENTIC <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">DRIVEN <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">INNOVATIVE <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">BOLD <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">INTENTIONAL <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">AUTHENTIC <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">DRIVEN <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">INNOVATIVE <span class="marquee-dot">◆</span></span>
+        </div>
+    </div>
+
+    <!-- Mission -->
+    <section class="mission-section">
+        <div class="mission-inner">
+            <div>
+                <div class="section-label reveal">OUR MISSION</div>
+                <p class="mission-quote reveal">
+                    We exist to make brands <em>impossible</em> to ignore.
+                </p>
+            </div>
+            <div class="mission-body reveal">
+                <p>
+                    Archive is a creative media company specialising in video production, photography, brand identity, and social media content. We partner with brands and creators who refuse to blend in — those who want to lead, not follow.
+                </p>
+                <p>
+                    Every piece of content we produce is built with intention. We don't just make things look good — we make them feel right. From the first frame of a campaign reel to the final frame of a social series, every decision is driven by a single goal: impact.
+                </p>
+                <p>
+                    We believe the most powerful brands are those that tell genuine stories. That's why we invest time understanding who you are before we ever touch a camera or open a design file.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values -->
+    <section class="section">
+        <div class="section-label reveal">OUR VALUES</div>
+        <div class="values-grid reveal">
+            <div class="value-card">
+                <div class="value-num">01</div>
+                <h3 class="value-title">Boldness</h3>
+                <p class="value-desc">We don't play it safe. Every project is an opportunity to push boundaries, challenge conventions, and create something that hasn't been done before.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-num">02</div>
+                <h3 class="value-title">Authenticity</h3>
+                <p class="value-desc">Real stories resonate. We dig deep to find the truth behind every brand and let that truth drive the creative. No fluff, no filler — just genuine storytelling.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-num">03</div>
+                <h3 class="value-title">Craft</h3>
+                <p class="value-desc">Details matter. We obsess over every frame, every cut, every pixel — because the difference between good and great lives in the details most people never notice.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-num">04</div>
+                <h3 class="value-title">Impact</h3>
+                <p class="value-desc">We measure success by results. Views, engagement, conversions, brand recognition — we create content designed to move the needle, not just fill a feed.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats-section">
+        <div class="stats-inner">
+            <div class="stat-block reveal">
+                <div class="stat-num">5<span>+</span></div>
+                <div class="stat-label">YEARS CREATING</div>
+            </div>
+            <div class="stat-block reveal">
+                <div class="stat-num">50<span>+</span></div>
+                <div class="stat-label">PROJECTS DELIVERED</div>
+            </div>
+            <div class="stat-block reveal">
+                <div class="stat-num">30<span>+</span></div>
+                <div class="stat-label">BRANDS ELEVATED</div>
+            </div>
+            <div class="stat-block reveal">
+                <div class="stat-num">100<span>%</span></div>
+                <div class="stat-label">CLIENT SATISFACTION</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Story -->
+    <section class="story-section">
+        <div class="story-inner">
+            <div class="story-text reveal">
+                <div class="section-label">OUR STORY</div>
+                <h2>Built by<br>creators,<br>for creators.</h2>
+                <p>
+                    Archive started with a simple frustration: creative brands deserved better content than what they were getting. Cookie-cutter photography. Generic video edits. Social feeds that looked like everyone else's.
+                </p>
+                <p>
+                    We built Archive to fix that. As creatives ourselves, we know what it takes to produce work that actually stands out — and we've built a company around delivering exactly that.
+                </p>
+                <p>
+                    Today, we work with brands across music, fashion, lifestyle, and business — helping them build visual identities and content strategies that turn audiences into communities.
+                </p>
+            </div>
+            <div class="story-visual reveal">
+                <img
+                    src="https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=800"
+                    alt="Archive Creative Studio"
+                    class="story-img"
+                >
+                <div class="story-visual-overlay">
+                    <span class="story-caption">ARCHIVE STUDIO — EST. 2024</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-label reveal">WHAT'S NEXT</div>
+        <h2 class="cta-headline reveal">Let's build<br>something<br>unforgettable.</h2>
+        <div class="cta-buttons reveal">
+            <a href="portfolio.html" class="btn-primary">SEE OUR WORK →</a>
+            <a href="contact.html" class="btn-secondary">GET IN TOUCH</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-text">© 2026 ARCHIVE — ALL RIGHTS RESERVED</span>
+        <span class="footer-text">CREATIVE MEDIA COMPANY</span>
+    </footer>
+
+    <script>
+        // ── PRELOADER ──
+        const preloaderEl = document.getElementById('preloader');
+        const fillEl = document.getElementById('preloaderFill');
+        const countEl = document.getElementById('preloaderCount');
+        setTimeout(() => { fillEl.style.width = '100%'; }, 50);
+        let prog = 0;
+        const ticker = setInterval(() => {
+            prog += Math.floor(Math.random() * 12) + 3;
+            if (prog >= 100) {
+                prog = 100;
+                clearInterval(ticker);
+                setTimeout(() => preloaderEl.classList.add('done'), 350);
+            }
+            countEl.textContent = prog;
+        }, 80);
+
+        // ── CURSOR ──
+        const dot = document.getElementById('cursorDot');
+        const ring = document.getElementById('cursorRing');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px';
+            dot.style.top  = my + 'px';
+        });
+        (function follow() {
+            rx += (mx - rx) * 0.1;
+            ry += (my - ry) * 0.1;
+            ring.style.left = rx + 'px';
+            ring.style.top  = ry + 'px';
+            requestAnimationFrame(follow);
+        })();
+        document.querySelectorAll('a, button, .value-card').forEach(el => {
+            el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+            el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+
+        // ── MOBILE NAV ──
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('open');
+        });
+
+        // ── SCROLL REVEAL ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

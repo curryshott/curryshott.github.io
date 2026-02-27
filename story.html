@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Story — Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600i&family=Barlow+Condensed:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1a1a1a;
+            --accent-color: #FF3D00;
+            --accent-glow: rgba(255, 61, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 4rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .nav-links { display: flex; gap: 3rem; align-items: center; }
+
+        .nav-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; left: 0;
+            width: 0; height: 1px;
+            background: var(--accent-color);
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none; border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem; cursor: none;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 4rem 5rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-darker);
+        }
+
+        .hero-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.35em;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s ease 0.8s forwards;
+        }
+
+        .hero-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(5rem, 18vw, 14rem);
+            font-weight: 800;
+            line-height: 0.88;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards;
+        }
+
+        .hero-sub {
+            margin-top: 2.5rem;
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 480px;
+            line-height: 1.7;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s ease 1.2s forwards;
+        }
+
+        /* Noise grain */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .hero > * { position: relative; z-index: 1; }
+
+        /* Accent glow blob */
+        .hero-glow {
+            position: absolute;
+            top: 20%;
+            right: 10%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-strip {
+            background: var(--accent-color);
+            padding: 0.75rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-track {
+            display: inline-flex;
+            animation: marquee 24s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: #000;
+            padding: 0 2rem;
+        }
+
+        .marquee-dot { color: rgba(0,0,0,0.35); }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to   { transform: translateX(-50%); }
+        }
+
+        /* ── PULLQUOTE ── */
+        .pullquote-section {
+            padding: 7rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .pullquote {
+            font-family: 'Crimson Pro', serif;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            font-weight: 300;
+            font-style: italic;
+            line-height: 1.4;
+            color: var(--text-primary);
+            border-left: 2px solid var(--accent-color);
+            padding-left: 2.5rem;
+        }
+
+        .pullquote em {
+            font-style: normal;
+            color: var(--accent-color);
+        }
+
+        /* ── SECTIONS ── */
+        .story-section {
+            padding: 7rem 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.35em;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-heading {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(2.5rem, 7vw, 5.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 3rem;
+            letter-spacing: 0.01em;
+        }
+
+        .section-heading span {
+            color: var(--accent-color);
+        }
+
+        .section-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .section-body.full {
+            grid-template-columns: 1fr;
+            max-width: 780px;
+        }
+
+        .body-text {
+            font-size: 1.2rem;
+            font-weight: 300;
+            line-height: 2;
+            color: rgba(255,255,255,0.78);
+        }
+
+        .body-text + .body-text {
+            margin-top: 1.5rem;
+        }
+
+        /* ── MILESTONE STRIP ── */
+        .milestone-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            margin-top: 5rem;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .milestone {
+            padding: 2.5rem 2rem 2.5rem 0;
+            border-right: 1px solid rgba(255,255,255,0.07);
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .milestone:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+
+        .milestone:hover {
+            background: rgba(255,255,255,0.02);
+        }
+
+        .milestone-year {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: var(--accent-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .milestone-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.6rem;
+        }
+
+        .milestone-desc {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* ── GAP SECTION ── */
+        .gap-diagram {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 2rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .gap-column {
+            background: var(--accent);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 2.5rem;
+        }
+
+        .gap-column-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .gap-column-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .gap-column-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .gap-divider {
+            text-align: center;
+        }
+
+        .gap-divider-icon {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+
+        .gap-divider-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        .gap-column.archive {
+            border-color: var(--accent-color);
+            background: rgba(255,61,0,0.04);
+        }
+
+        /* ── BELIEFS GRID ── */
+        .beliefs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .belief-card {
+            background: var(--accent);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .belief-card::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 16px; height: 16px;
+            border-top: 1px solid var(--accent-color);
+            border-left: 1px solid var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s, width 0.35s, height 0.35s;
+        }
+
+        .belief-card::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; right: -1px;
+            width: 16px; height: 16px;
+            border-bottom: 1px solid var(--accent-color);
+            border-right: 1px solid var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s, width 0.35s, height 0.35s;
+        }
+
+        .belief-card:hover::before,
+        .belief-card:hover::after {
+            opacity: 1;
+            width: 28px; height: 28px;
+        }
+
+        .belief-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .belief-number {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.3em;
+            color: var(--accent-color);
+            margin-bottom: 1.25rem;
+        }
+
+        .belief-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
+
+        .belief-text {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            padding: 8rem 4rem;
+            text-align: center;
+            background: var(--bg-dark);
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .cta-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.35em;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(3rem, 8vw, 6.5rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 2.5rem;
+        }
+
+        .cta-sub {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            max-width: 520px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(255,61,0,0.04);
+            transform: translateY(-2px);
+        }
+
+        .cta-btn svg {
+            width: 16px; height: 16px;
+            transition: transform 0.3s;
+        }
+
+        .cta-btn:hover svg {
+            transform: translateX(4px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--bg-dark);
+            padding: 3rem 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .footer-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        /* ── PRELOADER ── */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateY(0);
+            transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        #preloader.done { transform: translateY(100%); pointer-events: none; }
+
+        .preloader-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            letter-spacing: 0.6em;
+            color: #fff;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 0.2s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── PIXEL CURSOR ── */
+        #pixelCursor {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 99999;
+            will-change: transform;
+        }
+
+        body { cursor: none; }
+        a, button { cursor: none; }
+
+        @media (hover: none) {
+            #pixelCursor { display: none; }
+            body, a, button { cursor: auto; }
+        }
+
+        /* ── REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .milestone-strip { grid-template-columns: repeat(2, 1fr); }
+            .gap-diagram { grid-template-columns: 1fr; }
+            .gap-divider { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+
+            .nav-links {
+                position: fixed;
+                top: 70px; left: 0; right: 0;
+                background: rgba(0,0,0,0.97);
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+                transform: translateY(-100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .mobile-menu-toggle { display: block; }
+
+            .hero { padding: 0 1.5rem 4rem; }
+            .pullquote-section, .story-section { padding: 4rem 1.5rem; }
+            .section-body { grid-template-columns: 1fr; gap: 2rem; }
+            .milestone-strip { grid-template-columns: 1fr; }
+            .milestone { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); padding: 2rem 0; }
+            .milestone:last-child { border-bottom: none; }
+            .beliefs-grid { grid-template-columns: 1fr; }
+            .cta-section { padding: 5rem 1.5rem; }
+            footer { padding: 2rem 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .pullquote { font-size: 1.4rem; padding-left: 1.5rem; }
+            .hero-headline { font-size: clamp(4rem, 22vw, 7rem); }
+        }
+    </style>
+    <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-logo">ARCHIVE</div>
+    </div>
+
+    <!-- Pixel Cursor -->
+    <div id="pixelCursor">
+        <svg width="64" height="103" viewBox="0 0 13 21" xmlns="http://www.w3.org/2000/svg">
+            <path id="cursorOutline"
+                  fill="#ffffff"
+                  stroke="#0a0a0a"
+                  stroke-width="0.9"
+                  stroke-linejoin="round"
+                  d="M 0.5 0.5 L 0.5 17 L 5 13 L 8 19.5 L 10 18.5 L 7 12 L 12.5 12 Z"/>
+        </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="portfolio.html" class="nav-link">PORTFOLIO</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="story.html" class="nav-link active">STORY</a>
+                <a href="services.html" class="nav-link">SERVICES</a>
+                <a href="index.html#blog" class="nav-link">INSIGHTS</a>
+                <a href="contact.html" class="nav-link">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" style="padding-top: 80px;">
+        <div class="hero-glow"></div>
+        <div class="hero-eyebrow">THE STORY</div>
+        <h1 class="hero-headline">THE<br>STORY.</h1>
+        <p class="hero-sub">Not built for applause. Built because the alternative — creating nothing — was never an option.</p>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-strip">
+        <div class="marquee-track">
+            <span class="marquee-item">VISCERAL <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">DRIVEN <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">INTENTIONAL <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">RELENTLESS <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">STRATEGIC <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">VISCERAL <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">DRIVEN <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">INTENTIONAL <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">RELENTLESS <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">STRATEGIC <span class="marquee-dot">◆</span></span>
+        </div>
+    </div>
+
+    <!-- Pullquote -->
+    <div class="pullquote-section reveal">
+        <blockquote class="pullquote">
+            "I don't create for the applause. I create for the <em>reaction</em> — the moment something hits someone in the chest and they can't explain why."
+        </blockquote>
+    </div>
+
+    <!-- Section 01 — The Drive -->
+    <section class="story-section reveal">
+        <div class="section-number">01 — THE DRIVE</div>
+        <h2 class="section-heading">Why I <span>Create</span></h2>
+        <div class="section-body">
+            <div>
+                <p class="body-text">
+                    There's a feeling I've chased my whole life — the moment an audience reacts to something you made without knowing why. A sharp inhale. A freeze. A rewatch. That involuntary response is the only metric that matters to me.
+                </p>
+                <p class="body-text" style="margin-top: 1.5rem;">
+                    Most content gets forgotten in seconds. I've always believed that great media should leave a mark — something felt before it's ever understood. That conviction didn't come from a textbook. It came from paying attention.
+                </p>
+            </div>
+            <div>
+                <p class="body-text">
+                    Whether it was studying how a cut in a film changes the emotional weight of a scene, or watching a single ad send an entire comment section into a spiral — I became obsessed with the mechanics of feeling. How does media make people feel? Why does some work land and other work disappear?
+                </p>
+                <p class="body-text" style="margin-top: 1.5rem;">
+                    Archive was built on that obsession. It's not an agency. It's a point of view — executed with the precision of a business and the soul of an artist.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 02 — The Path -->
+    <section class="story-section reveal">
+        <div class="section-number">02 — THE PATH</div>
+        <h2 class="section-heading">How I Got <span>Here</span></h2>
+        <div class="section-body full">
+            <p class="body-text">
+                I started at Indiana University as a finance major — drawn to the logic of markets, the language of value. But I've always known that what I actually wanted to build lived somewhere between business and art. I made the pivot: economics as the foundation, media production as the practice.
+            </p>
+            <p class="body-text" style="margin-top: 1.5rem;">
+                That combination changed everything. I wasn't just learning to tell stories — I was learning how stories move, how they distribute value, how they shape perception at scale. At WTIU, Indiana's public television station, I directed a live daily news broadcast. Live. Every day. No room for error, no second takes — just execution under pressure. That experience wired me differently.
+            </p>
+        </div>
+
+        <!-- Milestone strip -->
+        <div class="milestone-strip">
+            <div class="milestone">
+                <div class="milestone-year">ORIGIN</div>
+                <div class="milestone-title">Finance at IU</div>
+                <div class="milestone-desc">Started at Indiana University studying finance — learning the logic of markets and how value is created, moved, and lost.</div>
+            </div>
+            <div class="milestone">
+                <div class="milestone-year">THE PIVOT</div>
+                <div class="milestone-title">Economics + Media Production</div>
+                <div class="milestone-desc">Added media production as a second major — where economics gave me the why, and production gave me the how.</div>
+            </div>
+            <div class="milestone">
+                <div class="milestone-year">IN THE FIELD</div>
+                <div class="milestone-title">Live Director, WTIU</div>
+                <div class="milestone-desc">Directed a daily live news segment at southern Indiana's public TV station. Real stakes, real deadlines — a masterclass in precision under pressure.</div>
+            </div>
+            <div class="milestone">
+                <div class="milestone-year">THE CRAFT</div>
+                <div class="milestone-title">Video Editor</div>
+                <div class="milestone-desc">A year in the edit suite taught me that storytelling lives in the details — the frame, the cut, the silence before the hit.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 03 — The Gap -->
+    <section class="story-section reveal">
+        <div class="section-number">03 — THE GAP</div>
+        <h2 class="section-heading">Why Archive <span>Exists</span></h2>
+        <div class="section-body full">
+            <p class="body-text">
+                I kept seeing the same problem everywhere. On one side: creative agencies with genuine artistic vision and zero understanding of how businesses actually grow. On the other: marketing consultants who knew the numbers cold but couldn't produce content that made anyone feel anything.
+            </p>
+            <p class="body-text" style="margin-top: 1.5rem;">
+                The businesses stuck in the middle were paying for one or the other — and getting half the result. No one was sitting at the intersection of craft and commerce. That's the gap Archive was built to fill.
+            </p>
+        </div>
+
+        <div class="gap-diagram">
+            <div class="gap-column">
+                <div class="gap-column-label">THE LEFT SIDE</div>
+                <div class="gap-column-title">Creative Agencies</div>
+                <div class="gap-column-text">Strong artistic instincts. Beautiful work. No framework for how creativity translates to business outcomes. The ROI conversation gets awkward fast.</div>
+            </div>
+            <div class="gap-divider">
+                <div class="gap-divider-icon">×</div>
+                <div class="gap-divider-label">THE GAP</div>
+            </div>
+            <div class="gap-column archive">
+                <div class="gap-column-label">THE ANSWER</div>
+                <div class="gap-column-title">Archive</div>
+                <div class="gap-column-text">Media that's designed to feel something — built by someone who understands both why the work matters and how the business grows. Both, not one.</div>
+            </div>
+        </div>
+
+        <div class="gap-diagram" style="margin-top: 1.5rem;">
+            <div class="gap-column">
+                <div class="gap-column-label">THE RIGHT SIDE</div>
+                <div class="gap-column-title">Business Consultants</div>
+                <div class="gap-column-text">Sharp on strategy. Data-fluent. But when it's time to make something — something that actually moves people — the output lands flat. Technically correct. Emotionally empty.</div>
+            </div>
+            <div class="gap-divider"></div>
+            <div class="gap-column" style="visibility: hidden;"></div>
+        </div>
+    </section>
+
+    <!-- Beliefs -->
+    <section class="story-section reveal">
+        <div class="section-number">04 — THE PRINCIPLES</div>
+        <h2 class="section-heading">What I <span>Believe</span></h2>
+
+        <div class="beliefs-grid">
+            <div class="belief-card">
+                <div class="belief-number">01</div>
+                <div class="belief-title">Feeling Beats Logic</div>
+                <div class="belief-text">People don't remember what they thought about a piece of content. They remember how it made them feel. The most technically correct strategy in the world loses to a single moment of genuine resonance.</div>
+            </div>
+            <div class="belief-card">
+                <div class="belief-number">02</div>
+                <div class="belief-title">Craft Is Non-Negotiable</div>
+                <div class="belief-text">There's no shortcut to quality. Great work is the result of obsessive attention — to the frame, the pacing, the word choice, the silence. Everything is a decision. Every decision matters.</div>
+            </div>
+            <div class="belief-card">
+                <div class="belief-number">03</div>
+                <div class="belief-title">Art and Business Aren't Opposites</div>
+                <div class="belief-text">The false choice between creativity and commerce is lazy thinking. The best media in the world was made by people who understood both. Archive refuses to choose sides.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-section reveal">
+        <div class="cta-label">READY TO WORK</div>
+        <h2 class="cta-headline">Work That Makes<br>People Feel Something.</h2>
+        <p class="cta-sub">If you're building something that deserves to be felt — not just seen — let's talk about what we can make together.</p>
+        <a href="contact.html" class="cta-btn">
+            START A PROJECT
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">© 2026 ARCHIVE — ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script>
+        // ── PRELOADER ──
+        const preloaderEl = document.getElementById('preloader');
+        setTimeout(() => preloaderEl.classList.add('done'), 700);
+
+        // ── PIXEL CURSOR ──
+        const pixelCursor = document.getElementById('pixelCursor');
+        const cursorOutline = document.getElementById('cursorOutline');
+        document.addEventListener('mousemove', e => {
+            pixelCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+        document.addEventListener('mousedown', () => {
+            if (cursorOutline) cursorOutline.setAttribute('stroke', '#00cc44');
+        });
+        document.addEventListener('mouseup', () => {
+            if (cursorOutline) cursorOutline.setAttribute('stroke', '#0a0a0a');
+        });
+
+        // ── MOBILE NAV ──
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', () => {
+            document.querySelector('.nav-links').classList.toggle('open');
+        });
+
+        // ── SCROLL REVEAL ──
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>

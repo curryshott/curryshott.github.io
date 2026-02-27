@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio — Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #888888;
+            --accent: #1a1a1a;
+            --highlight: #ffffff;
+            --accent-color: #FF3D00;
+            --accent-glow: rgba(255, 61, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 1.5rem 4rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ── HERO ── */
+        .portfolio-hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 4rem 5rem;
+            position: relative;
+            overflow: hidden;
+            background: var(--bg-darker);
+        }
+
+        .hero-bg-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
+            mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 40%, transparent 100%);
+        }
+
+        .hero-noise {
+            position: absolute;
+            inset: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        .hero-accent-dot {
+            position: absolute;
+            top: 30%;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.15) 0%, transparent 70%);
+            animation: pulse 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .hero-eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.8s ease-out 0.3s forwards;
+        }
+
+        .hero-headline {
+            font-size: clamp(4rem, 14vw, 11rem);
+            font-weight: 200;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.5s forwards;
+        }
+
+        .hero-headline span {
+            display: block;
+        }
+
+        .hero-headline .outline-text {
+            -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+            color: transparent;
+        }
+
+        .hero-sub-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-top: 3rem;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.9s ease-out 0.8s forwards;
+        }
+
+        .hero-descriptor {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            max-width: 400px;
+            font-weight: 300;
+        }
+
+        .hero-counter {
+            font-family: 'Space Mono', monospace;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            line-height: 1;
+        }
+
+        .hero-counter span {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.2em;
+            font-weight: 400;
+            margin-top: 0.25rem;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── MARQUEE ── */
+        .marquee-strip {
+            background: var(--accent-color);
+            padding: 0.75rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .marquee-track {
+            display: inline-flex;
+            animation: marquee 20s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: #000;
+            padding: 0 2rem;
+        }
+
+        .marquee-dot {
+            color: rgba(0,0,0,0.4);
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ── FILTER ── */
+        .filter-section {
+            padding: 4rem 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .filter-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--text-secondary);
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            padding: 0.5rem 1.25rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .filter-tab:hover {
+            border-color: rgba(255,255,255,0.3);
+            color: var(--text-primary);
+        }
+
+        .filter-tab.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #000;
+        }
+
+        /* ── PROJECT GRID ── */
+        .grid-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 4rem 6rem;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5px;
+            background: rgba(255,255,255,0.04);
+        }
+
+        .project-card {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            overflow: hidden;
+            cursor: pointer;
+            background: #0d0d0d;
+        }
+
+        .project-card.hidden {
+            display: none;
+        }
+
+        .project-card.featured {
+            grid-column: span 2;
+            aspect-ratio: 16 / 9;
+        }
+
+        .project-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
+            filter: brightness(0.65) saturate(0.8);
+        }
+
+        .project-card:hover .project-img {
+            transform: scale(1.06);
+            filter: brightness(0.4) saturate(0.6);
+        }
+
+        .project-info {
+            position: absolute;
+            inset: 0;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-tag {
+            display: inline-block;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            padding: 0.35rem 0.75rem;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(255, 61, 0, 0.08);
+            align-self: flex-start;
+        }
+
+        .project-bottom {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .project-name {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            font-weight: 300;
+            line-height: 1.2;
+            max-width: 70%;
+        }
+
+        .project-num {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        /* Hover overlay */
+        .project-overlay {
+            position: absolute;
+            inset: 0;
+            padding: 2rem;
+            background: rgba(0,0,0,0.0);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            transition: opacity 0.4s ease, background 0.4s ease;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .overlay-desc {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 1.25rem;
+            font-weight: 300;
+            transform: translateY(15px);
+            transition: transform 0.4s ease 0.05s;
+        }
+
+        .project-card:hover .overlay-desc {
+            transform: translateY(0);
+        }
+
+        .overlay-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: #000;
+            background: var(--accent-color);
+            padding: 0.6rem 1.25rem;
+            align-self: flex-start;
+            transform: translateY(15px);
+            transition: transform 0.4s ease 0.1s;
+        }
+
+        .project-card:hover .overlay-cta {
+            transform: translateY(0);
+        }
+
+        /* ── CTA SECTION ── */
+        .cta-section {
+            background: var(--bg-dark);
+            padding: 8rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,61,0,0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .cta-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.4em;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        .cta-headline {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: 200;
+            line-height: 1.1;
+            margin-bottom: 3rem;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 3rem;
+            background: var(--accent-color);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-button:hover {
+            background: #fff;
+            transform: translateY(-3px);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--bg-darker);
+            padding: 3rem 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 968px) {
+            nav { padding: 1rem 1.5rem; }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,0.98);
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                transform: translateY(-110%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .mobile-menu-toggle { display: block; }
+
+            .portfolio-hero { padding: 0 1.5rem 4rem; }
+
+            .hero-headline { font-size: clamp(3rem, 16vw, 7rem); }
+
+            .hero-sub-row { flex-direction: column; align-items: flex-start; gap: 2rem; }
+
+            .filter-section { padding: 2.5rem 1.5rem 1rem; }
+
+            .grid-wrapper { padding: 1.5rem 1.5px 4rem; }
+
+            .project-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .project-card.featured {
+                grid-column: span 2;
+                aspect-ratio: 4 / 3;
+            }
+
+            .cta-section { padding: 5rem 1.5rem; }
+
+            footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.5rem; }
+        }
+
+        @media (max-width: 580px) {
+            .project-grid { grid-template-columns: 1fr; }
+            .project-card.featured { grid-column: span 1; aspect-ratio: 4 / 5; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="portfolio.html" class="nav-link active">PORTFOLIO</a>
+                <a href="index.html#services" class="nav-link">SERVICES</a>
+                <a href="index.html#blog" class="nav-link">INSIGHTS</a>
+                <a href="contact.html" class="nav-link">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="portfolio-hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-noise"></div>
+        <div class="hero-accent-dot"></div>
+
+        <div class="hero-eyebrow">02 — SELECTED WORKS</div>
+
+        <h1 class="hero-headline">
+            <span>OUR</span>
+            <span class="outline-text">WORK.</span>
+        </h1>
+
+        <div class="hero-sub-row">
+            <p class="hero-descriptor">
+                A curated selection of projects spanning video production, photography, brand identity, and social media — each built to make an impact.
+            </p>
+            <div class="hero-counter">
+                09
+                <span>PROJECTS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee-strip">
+        <div class="marquee-track">
+            <span class="marquee-item">VIDEO PRODUCTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">BRAND IDENTITY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">PHOTOGRAPHY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">SOCIAL MEDIA <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE DIRECTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">MOTION GRAPHICS <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">VIDEO PRODUCTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">BRAND IDENTITY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">PHOTOGRAPHY <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">SOCIAL MEDIA <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">CREATIVE DIRECTION <span class="marquee-dot">◆</span></span>
+            <span class="marquee-item">MOTION GRAPHICS <span class="marquee-dot">◆</span></span>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-section">
+        <span class="filter-label">FILTER BY</span>
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">ALL</button>
+            <button class="filter-tab" data-filter="video">VIDEO</button>
+            <button class="filter-tab" data-filter="photo">PHOTO</button>
+            <button class="filter-tab" data-filter="brand">BRAND</button>
+            <button class="filter-tab" data-filter="social">SOCIAL</button>
+        </div>
+    </div>
+
+    <!-- Project Grid -->
+    <div class="grid-wrapper">
+        <div class="project-grid" id="projectGrid">
+
+            <!-- 001: featured video -->
+            <div class="project-card featured" data-category="video">
+                <img src="https://images.unsplash.com/photo-1574717024453-354056bafa51?q=80&w=1600" alt="Campaign Reel" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">VIDEO</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Campaign Reel 2025</h3>
+                        <span class="project-num">001</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">A cinematic brand campaign blending narrative storytelling with high-production visuals for a global launch.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 002: brand -->
+            <div class="project-card" data-category="brand">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800" alt="Noire Brand Identity" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">BRAND</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Noire Brand Identity</h3>
+                        <span class="project-num">002</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">Complete visual identity system for a luxury fashion label — logo, palette, type, and brand guidelines.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 003: photo -->
+            <div class="project-card" data-category="photo">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800" alt="Editorial Series" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">PHOTO</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Editorial Series</h3>
+                        <span class="project-num">003</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">A 12-image editorial for a fashion house blending moody lighting with architectural geometry.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 004: social -->
+            <div class="project-card" data-category="social">
+                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=800" alt="Social Content Pack" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">SOCIAL</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Social Content Pack</h3>
+                        <span class="project-num">004</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">60-piece content library spanning reels, carousels, and stories — built to grow and convert.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 005: video -->
+            <div class="project-card" data-category="video">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=800" alt="Short Film — Echoes" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">VIDEO</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Short Film — Echoes</h3>
+                        <span class="project-num">005</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">An award-winning 8-minute short film exploring identity and memory through a nonlinear lens.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 006: photo -->
+            <div class="project-card" data-category="photo">
+                <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=800" alt="Studio Sessions" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">PHOTO</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Studio Sessions</h3>
+                        <span class="project-num">006</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">Artist documentary portraits shot across three cities, capturing raw creative process and energy.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 007: brand -->
+            <div class="project-card featured" data-category="brand">
+                <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1600" alt="Brand System — Nova" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">BRAND</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Brand System — Nova</h3>
+                        <span class="project-num">007</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">End-to-end brand build for a tech startup — identity, motion language, web presence, and launch campaign.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 008: social -->
+            <div class="project-card" data-category="social">
+                <img src="https://images.unsplash.com/photo-1536240478700-b869ad10e128?q=80&w=800" alt="Creator Content Series" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">SOCIAL</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Creator Content Series</h3>
+                        <span class="project-num">008</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">Six-week content campaign for an influencer brand — scripted, shot, edited, and deployed across platforms.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+            <!-- 009: video -->
+            <div class="project-card" data-category="video">
+                <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=800" alt="Motion Title Sequence" class="project-img">
+                <div class="project-info">
+                    <span class="project-tag">VIDEO</span>
+                    <div class="project-bottom">
+                        <h3 class="project-name">Motion Title Sequence</h3>
+                        <span class="project-num">009</span>
+                    </div>
+                </div>
+                <div class="project-overlay">
+                    <p class="overlay-desc">Cinematic opening sequence for a docuseries — typographic animation, sound design, and color grading.</p>
+                    <span class="overlay-cta">VIEW PROJECT →</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-label">READY TO CREATE?</div>
+        <h2 class="cta-headline">Let's build<br>something bold.</h2>
+        <a href="contact.html" class="cta-button">START A PROJECT →</a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span class="footer-text">© 2026 ARCHIVE — ALL RIGHTS RESERVED</span>
+        <span class="footer-text">CREATIVE MEDIA COMPANY</span>
+    </footer>
+
+    <script>
+        // Mobile nav
+        const toggle = document.querySelector('.mobile-menu-toggle');
+        const links = document.querySelector('.nav-links');
+        toggle.addEventListener('click', () => links.classList.toggle('open'));
+
+        // Filter
+        const tabs = document.querySelectorAll('.filter-tab');
+        const cards = document.querySelectorAll('.project-card');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                const filter = tab.dataset.filter;
+
+                cards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                // Reflow grid after filtering
+                const grid = document.getElementById('projectGrid');
+                grid.style.display = 'none';
+                requestAnimationFrame(() => { grid.style.display = 'grid'; });
+            });
+        });
+    </script>
+</body>
+</html>

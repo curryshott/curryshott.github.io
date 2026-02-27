@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg-dark: #0a0a0a; --bg-darker: #000000; --text-primary: #ffffff; --text-secondary: #999999; --accent: #2a2a2a; }
+        body { font-family: 'Crimson Pro', serif; background: var(--bg-darker); color: var(--text-primary); overflow-x: hidden; }
+        
+        nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 4rem; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Space Mono', monospace; font-size: 1rem; letter-spacing: 0.3em; color: var(--text-primary); text-decoration: none; font-weight: 700; }
+        .nav-links { display: flex; gap: 3rem; align-items: center; }
+        .nav-link { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-secondary); text-decoration: none; transition: color 0.3s ease; }
+        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        
+        .contact-container { max-width: 800px; margin: 0 auto; padding: 12rem 2rem 8rem; }
+        .section-label { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.3em; color: var(--text-secondary); margin-bottom: 2rem; text-transform: uppercase; }
+        .section-title { font-size: clamp(2.5rem, 8vw, 5rem); font-weight: 200; margin-bottom: 2rem; line-height: 1.2; }
+        .section-description { font-size: 1.25rem; line-height: 2; font-weight: 300; color: var(--text-secondary); margin-bottom: 4rem; }
+        
+        .contact-form { background: var(--accent); padding: 3rem; border: 1px solid rgba(255,255,255,0.1); }
+        .form-group { margin-bottom: 2rem; }
+        .form-label { display: block; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; }
+        .form-input, .form-textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary); padding: 1rem; font-family: 'Crimson Pro', serif; font-size: 1rem; transition: border-color 0.3s ease; }
+        .form-input:focus, .form-textarea:focus { outline: none; border-color: rgba(255,255,255,0.5); }
+        .form-textarea { min-height: 200px; resize: vertical; }
+        
+        .submit-button { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary); padding: 1rem 3rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; cursor: pointer; transition: all 0.3s ease; width: 100%; text-transform: uppercase; }
+        .submit-button:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05); transform: translateY(-2px); }
+        .submit-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        .success-message { display: none; background: rgba(0,255,0,0.1); border: 1px solid rgba(0,255,0,0.3); color: #00ff00; padding: 1.5rem; margin-bottom: 2rem; font-family: 'Space Mono', monospace; font-size: 0.875rem; }
+        .success-message.show { display: block; }
+        
+        .contact-info { margin-top: 4rem; padding-top: 4rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .info-item { margin-bottom: 1.5rem; }
+        .info-label { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .info-text { font-size: 1.15rem; color: var(--text-primary); }
+        
+        footer { background: var(--bg-dark); padding: 4rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; }
+        .footer-text { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-secondary); }
+        
+        .mobile-menu-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.5rem; cursor: pointer; }
+        
+        @media (max-width: 968px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { position: fixed; top: 70px; left: 0; right: 0; background: rgba(10, 10, 10, 0.98); flex-direction: column; gap: 1.5rem; padding: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); transform: translateY(-100%); opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+            .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: all; }
+            .mobile-menu-toggle { display: block; }
+            .contact-container { padding: 10rem 1.5rem 4rem; }
+            .contact-form { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="index.html#portfolio" class="nav-link">PORTFOLIO</a>
+                <a href="index.html#services" class="nav-link">SERVICES</a>
+                <a href="index.html#blog" class="nav-link">INSIGHTS</a>
+                <a href="contact.html" class="nav-link active">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Content -->
+    <main class="contact-container">
+        <div class="section-label">GET IN TOUCH</div>
+        <h1 class="section-title">Let's Work Together</h1>
+        <p class="section-description">
+            Have a project in mind? Want to discuss collaboration opportunities? Send us a message and we'll get back to you as soon as possible.
+        </p>
+
+        <div class="success-message" id="successMessage">
+            Thank you for your message! We'll get back to you soon.
+        </div>
+
+        <!-- Contact Form -->
+        <!-- IMPORTANT: Replace YOUR_FORMSPREE_URL_HERE with your actual Formspree endpoint -->
+        <!-- Instructions: 
+             1. Go to https://formspree.io
+             2. Sign up with kl313kl@gmail.com
+             3. Create a new form
+             4. Copy your form endpoint URL (looks like: https://formspree.io/f/xxxxxxxx)
+             5. Replace the action URL below
+        -->
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORMSPREE_URL_HERE" method="POST">
+            <div class="form-group">
+                <label for="name" class="form-label">Your Name</label>
+                <input type="text" id="name" name="name" class="form-input" required placeholder="John Doe">
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Your Email</label>
+                <input type="email" id="email" name="email" class="form-input" required placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" id="subject" name="subject" class="form-input" required placeholder="Project Inquiry">
+            </div>
+
+            <div class="form-group">
+                <label for="message" class="form-label">Message</label>
+                <textarea id="message" name="message" class="form-textarea" required placeholder="Tell us about your project..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-button" id="submitBtn">Send Message</button>
+        </form>
+
+        <!-- Contact Info -->
+        <div class="contact-info">
+            <div class="info-item">
+                <div class="info-label">EMAIL</div>
+                <div class="info-text">kl313kl@gmail.com</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">RESPONSE TIME</div>
+                <div class="info-text">Within 24-48 hours</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">© 2024 ARCHIVE — ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('open');
+            });
+        }
+
+        // Form submission handling
+        const form = document.getElementById('contactForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            // Don't prevent default - let Formspree handle it
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'SENDING...';
+        });
+
+        // Check for success in URL (Formspree redirects back)
+        if (window.location.search.includes('success')) {
+            successMessage.classList.add('show');
+            form.reset();
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'SEND MESSAGE';
+        }
+    </script>
+</body>
+</html>

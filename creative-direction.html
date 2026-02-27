@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Direction - Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-darker: #000000;
+            --text-primary: #ffffff;
+            --text-secondary: #999999;
+            --accent: #2a2a2a;
+            --highlight: #ffffff;
+        }
+
+        body {
+            font-family: 'Crimson Pro', serif;
+            background: var(--bg-darker);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Navigation Menu */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 1.5rem 4rem;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            letter-spacing: 0.3em;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--text-primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .content-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 12rem 4rem 8rem;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 200;
+            margin-bottom: 3rem;
+            line-height: 1.2;
+        }
+
+        .bio-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+            align-items: start;
+            margin-top: 4rem;
+        }
+
+        .bio-text {
+            font-size: 1.25rem;
+            line-height: 2;
+            font-weight: 300;
+        }
+
+        .bio-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .stat-item {
+            border-left: 1px solid rgba(255,255,255,0.2);
+            padding-left: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 200;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.875rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        .section-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .content-card {
+            background: var(--accent);
+            padding: 3rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            background: var(--bg-dark);
+            padding: 4rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-text {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 968px) {
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 2rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                transform: translateY(-100%);
+                opacity: 0;
+                pointer-events: none;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.open {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: all;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .bio-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .content-section {
+                padding: 10rem 1.5rem 4rem;
+            }
+
+            .section-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="index.html#portfolio" class="nav-link active">PORTFOLIO</a>
+                <a href="index.html#services" class="nav-link">SERVICES</a>
+                <a href="index.html#blog" class="nav-link">INSIGHTS</a>
+                <a href="contact.html" class="nav-link">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <section class="content-section">
+            <div class="section-label">PORTFOLIO — CREATIVE DIRECTION</div>
+            <h2 class="section-title">Strategic Visual Leadership</h2>
+            
+            <div class="bio-section">
+                <div class="bio-text">
+                    Our brand identity work goes beyond logos and color palettes. We craft comprehensive visual systems that tell your story, resonate with your audience, and stand the test of time. From initial concept to final execution, we ensure every touchpoint reflects your brand's unique personality and values.
+                    <br><br>
+                    We believe that a strong brand identity is the foundation of business success. It's not just about looking good—it's about communicating who you are, what you stand for, and why you matter. Our process combines strategic thinking with creative excellence to build brands that endure.
+                </div>
+                
+                <div class="bio-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">25+</div>
+                        <div class="stat-label">BRANDS LAUNCHED</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">90%</div>
+                        <div class="stat-label">REBRAND SUCCESS RATE</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">CLIENT SATISFACTION</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-content">
+                <div class="content-card">
+                    <h3 class="card-title">Logo Design</h3>
+                    <p class="card-description">
+                        Creating memorable, versatile logos that become the visual anchor of your brand, working across all mediums and scales.
+                    </p>
+                </div>
+                
+                <div class="content-card">
+                    <h3 class="card-title">Visual Systems</h3>
+                    <p class="card-description">
+                        Developing comprehensive design systems including typography, color palettes, patterns, and iconography.
+                    </p>
+                </div>
+                
+                <div class="content-card">
+                    <h3 class="card-title">Brand Guidelines</h3>
+                    <p class="card-description">
+                        Documenting your brand standards to ensure consistency across all applications and team members.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-text">© 2024 ARCHIVE — ALL RIGHTS RESERVED</p>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileToggle = document.querySelector('.mobile-menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

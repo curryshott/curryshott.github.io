@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI, Automation, and Economic Disruption - Archive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --bg-dark: #0a0a0a; --bg-darker: #000000; --text-primary: #ffffff; --text-secondary: #999999; --accent: #2a2a2a; }
+        body { font-family: 'Crimson Pro', serif; background: var(--bg-darker); color: var(--text-primary); }
+        nav { position: fixed; top: 0; left: 0; width: 100%; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 4rem; }
+        .nav-container { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { font-family: 'Space Mono', monospace; font-size: 1rem; letter-spacing: 0.3em; color: var(--text-primary); text-decoration: none; font-weight: 700; }
+        .nav-links { display: flex; gap: 3rem; }
+        .nav-link { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--text-secondary); text-decoration: none; transition: color 0.3s; }
+        .nav-link:hover, .nav-link.active { color: var(--text-primary); }
+        .article-container { max-width: 900px; margin: 0 auto; padding: 12rem 2rem 4rem; }
+        .article-date { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.3em; color: var(--text-secondary); margin-bottom: 2rem; }
+        .article-title { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 200; line-height: 1.2; margin-bottom: 2rem; }
+        .article-excerpt { font-size: 1.25rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 4rem; }
+        .article-content { font-size: 1.15rem; line-height: 2; font-weight: 300; }
+        .article-content p { margin-bottom: 2rem; }
+        .related-posts { margin-top: 8rem; padding-top: 4rem; border-top: 1px solid rgba(255,255,255,0.1); }
+        .related-title { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.3em; color: var(--text-secondary); margin-bottom: 3rem; }
+        .related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; }
+        .related-card { background: var(--accent); padding: 2rem; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
+        .related-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); }
+        .related-card-date { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.15em; color: var(--text-secondary); margin-bottom: 1rem; }
+        .related-card-title { font-size: 1.25rem; margin-bottom: 0.75rem; }
+        .related-card-excerpt { font-size: 0.95rem; line-height: 1.6; color: var(--text-secondary); }
+        footer { background: var(--bg-dark); padding: 4rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; }
+        .footer-text { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-secondary); }
+        @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .article-container { padding: 10rem 1.5rem 2rem; } .related-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">ARCHIVE</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">HOME</a>
+                <a href="index.html" class="nav-link">PORTFOLIO</a>
+                <a href="index.html" class="nav-link">SERVICES</a>
+                <a href="index.html" class="nav-link active">INSIGHTS</a>
+                <a href="contact.html" class="nav-link">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <article class="article-container">
+        <header>
+            <div class="article-date">DECEMBER 2025</div>
+            <h1 class="article-title">AI, Automation, and Economic Disruption</h1>
+            <p class="article-excerpt">Exploring the economic implications of AI-driven automation and societal adaptation.</p>
+        </header>
+
+        <div class="article-content">
+            <p>Artificial intelligence represents the most significant technological shift since industrialization. When content can be copied endlessly at zero marginal cost, how do creators capture value? This question has shaped everything from copyright law to platform business models.</p>
+            <p>Blockchain technology and NFTs have introduced artificial scarcity into the digital realm. For the first time, digital assets can be provably unique and owned, creating new economic models for creators. This shift represents more than technological novelty—it's a fundamental restructuring of digital property rights.</p>
+            <p>The economic implications are profound. Traditional intermediaries—platforms, galleries, publishers—have extracted significant value by controlling distribution. Decentralized systems promise to disintermediate these relationships, allowing creators to capture more value directly. However, this assumes efficient market discovery and overlooks the real value that curation and promotion provide.</p>
+            <p>What we're witnessing is not simply a technological shift but an experiment in alternative economic structures. The creator economy powered by digital scarcity offers new possibilities, but also new challenges around speculation, environmental costs, and market volatility. The ultimate question: can artificial scarcity create sustainable value, or is it merely financialization of culture?</p>
+        </div>
+
+        <div class="related-posts">
+            <h2 class="related-title">MORE INSIGHTS</h2>
+            <div class="related-grid">
+                <a href="blog-post-2.html" class="related-card">
+                    <div class="related-card-date">JANUARY 2026</div>
+                    <h3 class="related-card-title">Platform Economics and the Future of Work</h3>
+                    <p class="related-card-excerpt">How platform-based business models are transforming labor markets.</p>
+                </a>
+                <a href="blog-post-3.html" class="related-card">
+                    <div class="related-card-date">DECEMBER 2025</div>
+                    <h3 class="related-card-title">AI, Automation, and Economic Disruption</h3>
+                    <p class="related-card-excerpt">Exploring the economic implications of AI-driven automation.</p>
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <footer><p class="footer-text">© 2024 ARCHIVE — ALL RIGHTS RESERVED</p></footer>
+</body>
+</html>

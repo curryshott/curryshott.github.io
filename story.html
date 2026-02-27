@@ -326,9 +326,10 @@
         }
 
         .gap-column {
-            background: var(--accent);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 2.5rem;
+            transition: background 0.35s ease;
         }
 
         .gap-column-label {
@@ -375,7 +376,7 @@
 
         .gap-column.archive {
             border-color: var(--accent-color);
-            background: rgba(255,61,0,0.04);
+            background: transparent;
         }
 
         /* ── BELIEFS GRID ── */
@@ -387,8 +388,8 @@
         }
 
         .belief-card {
-            background: var(--accent);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: transparent;
+            border: 1px solid transparent;
             padding: 2.5rem;
             position: relative;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -424,7 +425,8 @@
 
         .belief-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.1);
         }
 
         .belief-number {

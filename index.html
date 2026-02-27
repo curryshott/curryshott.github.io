@@ -784,12 +784,12 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            clip-path: inset(0 0 0 0);
-            transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.2s;
+            transform: translateY(0);
+            transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
         }
 
         #preloader.done {
-            clip-path: inset(0 0 100% 0);
+            transform: translateY(100%);
             pointer-events: none;
         }
 
@@ -798,31 +798,8 @@
             font-size: clamp(1.5rem, 6vw, 2.5rem);
             letter-spacing: 0.6em;
             color: #fff;
-            margin-bottom: 2.5rem;
             opacity: 0;
-            animation: fadeInUp 0.6s ease 0.3s forwards;
-        }
-
-        .preloader-line {
-            width: 180px;
-            height: 1px;
-            background: rgba(255,255,255,0.1);
-            overflow: hidden;
-            margin-bottom: 1rem;
-        }
-
-        .preloader-fill {
-            height: 100%;
-            width: 0%;
-            background: var(--accent-color);
-            transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
-        }
-
-        .preloader-count {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            color: rgba(255,255,255,0.3);
+            animation: fadeInUp 0.6s ease 0.2s forwards;
         }
 
         @keyframes fadeInUp {
@@ -830,46 +807,22 @@
             to   { opacity: 1; transform: translateY(0); }
         }
 
-        /* ── CUSTOM CURSOR ── */
-        .cursor-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-color);
-            border-radius: 50%;
+        /* ── PIXEL CURSOR ── */
+        #pixelCursor {
             position: fixed;
+            top: 0;
+            left: 0;
             pointer-events: none;
             z-index: 99999;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.3s ease;
-        }
-
-        .cursor-ring {
-            width: 38px;
-            height: 38px;
-            border: 1px solid rgba(255,255,255,0.35);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 99998;
-            transform: translate(-50%, -50%);
-            transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
-                        height 0.35s cubic-bezier(0.4,0,0.2,1),
-                        border-color 0.35s ease,
-                        opacity 0.3s ease;
-        }
-
-        .cursor-ring.hover {
-            width: 60px;
-            height: 60px;
-            border-color: var(--accent-color);
-            opacity: 0.6;
+            will-change: transform;
+            image-rendering: pixelated;
         }
 
         body { cursor: none; }
         a, button { cursor: none; }
 
         @media (hover: none) {
-            .cursor-dot, .cursor-ring { display: none; }
+            #pixelCursor { display: none; }
             body, a, button { cursor: auto; }
         }
     </style>
@@ -878,13 +831,37 @@
     <!-- Preloader -->
     <div id="preloader">
         <div class="preloader-logo">ARCHIVE</div>
-        <div class="preloader-line"><div class="preloader-fill" id="preloaderFill"></div></div>
-        <div class="preloader-count" id="preloaderCount">0</div>
     </div>
 
-    <!-- Custom Cursor -->
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ring" id="cursorRing"></div>
+    <!-- Pixel Cursor -->
+    <div id="pixelCursor">
+        <svg width="48" height="88" viewBox="0 0 6 11" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+            <rect x="0" y="0" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="0" y="1" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="1" y="1" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="0" y="2" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="2" y="2" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="0" y="3" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="3" y="3" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="0" y="4" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="4" y="4" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="0" y="5" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="5" y="5" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="0" y="6" width="6" height="1" fill="#0a0a0a"/>
+            <rect x="3" y="7" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="5" y="7" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="3" y="8" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="5" y="8" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="3" y="9" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="5" y="9" width="1" height="1" fill="#0a0a0a"/>
+            <rect x="3" y="10" width="2" height="1" fill="#0a0a0a"/>
+            <rect x="1" y="2" width="1" height="1" fill="#ffffff"/>
+            <rect x="1" y="3" width="2" height="1" fill="#ffffff"/>
+            <rect x="1" y="4" width="3" height="1" fill="#ffffff"/>
+            <rect x="1" y="5" width="4" height="1" fill="#ffffff"/>
+            <rect x="4" y="7" width="1" height="3" fill="#ffffff"/>
+        </svg>
+    </div>
 
     <!-- Welcome Section -->
     <section class="welcome-section" id="welcome">
@@ -1145,46 +1122,12 @@
     <script>
         // ── PRELOADER ──
         const preloaderEl = document.getElementById('preloader');
-        const fillEl = document.getElementById('preloaderFill');
-        const countEl = document.getElementById('preloaderCount');
+        setTimeout(() => preloaderEl.classList.add('done'), 700);
 
-        // Trigger fill bar
-        setTimeout(() => { fillEl.style.width = '100%'; }, 50);
-
-        // Animate counter 0→100
-        let prog = 0;
-        const ticker = setInterval(() => {
-            prog += Math.floor(Math.random() * 12) + 3;
-            if (prog >= 100) {
-                prog = 100;
-                clearInterval(ticker);
-                setTimeout(() => preloaderEl.classList.add('done'), 350);
-            }
-            countEl.textContent = prog;
-        }, 80);
-
-        // ── CUSTOM CURSOR ──
-        const dot = document.getElementById('cursorDot');
-        const ring = document.getElementById('cursorRing');
-        let mx = 0, my = 0, rx = 0, ry = 0;
-
+        // ── PIXEL CURSOR ──
+        const pixelCursor = document.getElementById('pixelCursor');
         document.addEventListener('mousemove', e => {
-            mx = e.clientX; my = e.clientY;
-            dot.style.left = mx + 'px';
-            dot.style.top  = my + 'px';
-        });
-
-        (function followRing() {
-            rx += (mx - rx) * 0.1;
-            ry += (my - ry) * 0.1;
-            ring.style.left = rx + 'px';
-            ring.style.top  = ry + 'px';
-            requestAnimationFrame(followRing);
-        })();
-
-        document.querySelectorAll('a, button, .content-card').forEach(el => {
-            el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-            el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+            pixelCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
         });
 
         // ── MAIN SCROLL LOCK ──

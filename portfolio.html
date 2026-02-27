@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio — Archive</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Crimson+Pro:wght@200;300;400;600&family=Barlow+Condensed:wght@300;400;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -164,10 +164,12 @@
         }
 
         .hero-headline {
-            font-size: clamp(4rem, 14vw, 11rem);
-            font-weight: 200;
-            line-height: 0.95;
-            letter-spacing: -0.02em;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(5rem, 18vw, 14rem);
+            font-weight: 800;
+            line-height: 0.88;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
             position: relative;
             z-index: 2;
             opacity: 0;
@@ -569,9 +571,113 @@
             .project-grid { grid-template-columns: 1fr; }
             .project-card.featured { grid-column: span 1; aspect-ratio: 4 / 5; }
         }
+
+        /* ── PRELOADER ── */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            clip-path: inset(0 0 0 0);
+            transition: clip-path 0.9s cubic-bezier(0.76, 0, 0.24, 1) 0.2s;
+        }
+
+        #preloader.done { clip-path: inset(0 0 100% 0); pointer-events: none; }
+
+        .preloader-logo {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            letter-spacing: 0.6em;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: plFadeIn 0.6s ease 0.3s forwards;
+        }
+
+        .preloader-line {
+            width: 180px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .preloader-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--accent-color);
+            transition: width 1.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        .preloader-count {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: rgba(255,255,255,0.3);
+        }
+
+        @keyframes plFadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── CUSTOM CURSOR ── */
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-ring {
+            width: 38px;
+            height: 38px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
+                        height 0.35s cubic-bezier(0.4,0,0.2,1),
+                        border-color 0.35s ease;
+        }
+
+        .cursor-ring.hover {
+            width: 70px;
+            height: 70px;
+            border-color: var(--accent-color);
+            opacity: 0.5;
+        }
+
+        body { cursor: none; }
+        a, button { cursor: none; }
+
+        @media (hover: none) {
+            .cursor-dot, .cursor-ring { display: none; }
+            body, a, button { cursor: auto; }
+        }
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-logo">ARCHIVE</div>
+        <div class="preloader-line"><div class="preloader-fill" id="preloaderFill"></div></div>
+        <div class="preloader-count" id="preloaderCount">0</div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
 
     <!-- Navigation -->
     <nav>
@@ -807,7 +913,44 @@
     </footer>
 
     <script>
-        // Mobile nav
+        // ── PRELOADER ──
+        const preloaderEl = document.getElementById('preloader');
+        const fillEl = document.getElementById('preloaderFill');
+        const countEl = document.getElementById('preloaderCount');
+        setTimeout(() => { fillEl.style.width = '100%'; }, 50);
+        let prog = 0;
+        const ticker = setInterval(() => {
+            prog += Math.floor(Math.random() * 12) + 3;
+            if (prog >= 100) {
+                prog = 100;
+                clearInterval(ticker);
+                setTimeout(() => preloaderEl.classList.add('done'), 350);
+            }
+            countEl.textContent = prog;
+        }, 80);
+
+        // ── CUSTOM CURSOR ──
+        const dot = document.getElementById('cursorDot');
+        const ring = document.getElementById('cursorRing');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.left = mx + 'px';
+            dot.style.top  = my + 'px';
+        });
+        (function followRing() {
+            rx += (mx - rx) * 0.1;
+            ry += (my - ry) * 0.1;
+            ring.style.left = rx + 'px';
+            ring.style.top  = ry + 'px';
+            requestAnimationFrame(followRing);
+        })();
+        document.querySelectorAll('a, button, .project-card').forEach(el => {
+            el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+            el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+        });
+
+        // ── MOBILE NAV ──
         const toggle = document.querySelector('.mobile-menu-toggle');
         const links = document.querySelector('.nav-links');
         toggle.addEventListener('click', () => links.classList.toggle('open'));

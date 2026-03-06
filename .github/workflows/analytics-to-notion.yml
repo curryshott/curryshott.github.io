@@ -1,0 +1,32 @@
+name: Sync Analytics to Notion
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'   # Every Monday at 9 AM UTC (auto-sync)
+  workflow_dispatch:        # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install @notionhq/client google-auth-library
+        working-directory: scripts
+
+      - name: Run analytics sync
+        run: node sync-analytics.js
+        working-directory: scripts
+        env:
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_ANALYTICS_DB_ID: ${{ secrets.NOTION_ANALYTICS_DB_ID }}
+          GA4_PROPERTY_ID: ${{ secrets.GA4_PROPERTY_ID }}
+          GA4_SERVICE_ACCOUNT_KEY: ${{ secrets.GA4_SERVICE_ACCOUNT_KEY }}

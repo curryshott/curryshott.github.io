@@ -888,7 +888,7 @@
                 <a href="about.html" class="nav-link">ABOUT</a>
                 <a href="story.html" class="nav-link">STORY</a>
                 <a href="services.html" class="nav-link">SERVICES</a>
-                <a href="#blog" class="nav-link">INSIGHTS</a>
+                <a href="blog-post-1.html" class="nav-link">INSIGHTS</a>
                 <a href="contact.html" class="nav-link">CONTACT</a>
             </div>
         </div>
@@ -1130,8 +1130,7 @@
         // Prevent scrolling on welcome page
         document.body.classList.add('no-scroll');
 
-        // Skip welcome screen when arriving via a hash link (e.g. index.html#blog)
-        // or navigating back from another page on the site
+        // Skip welcome screen when arriving via a hash link or navigating back from another page on the site
         if (window.location.hash || (document.referrer && document.referrer.includes(window.location.hostname) && !document.referrer.endsWith('index.html') && !document.referrer.endsWith('/'))) {
             document.body.classList.remove('no-scroll');
             document.querySelector('.welcome-section').classList.add('hidden');

@@ -33,6 +33,14 @@
         .footer-text { font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-secondary); }
         @media (max-width: 768px) { nav { padding: 1rem 1.5rem; } .article-container { padding: 10rem 1.5rem 2rem; } .related-grid { grid-template-columns: 1fr; } }
     </style>
+    <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
 </head>
 <body>
     <nav>
@@ -40,9 +48,11 @@
             <a href="index.html" class="nav-logo">ARCHIVE</a>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">HOME</a>
-                <a href="index.html" class="nav-link">PORTFOLIO</a>
-                <a href="index.html" class="nav-link">SERVICES</a>
-                <a href="index.html" class="nav-link active">INSIGHTS</a>
+                <a href="portfolio.html" class="nav-link">PORTFOLIO</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="story.html" class="nav-link">STORY</a>
+                <a href="services.html" class="nav-link">SERVICES</a>
+                <a href="index.html#blog" class="nav-link active">INSIGHTS</a>
                 <a href="contact.html" class="nav-link">CONTACT</a>
             </div>
         </div>

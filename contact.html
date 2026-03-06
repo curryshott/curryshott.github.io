@@ -25,8 +25,12 @@
         .contact-form { background: var(--accent); padding: 3rem; border: 1px solid rgba(255,255,255,0.1); }
         .form-group { margin-bottom: 2rem; }
         .form-label { display: block; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--text-secondary); margin-bottom: 0.75rem; text-transform: uppercase; }
-        .form-input, .form-textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary); padding: 1rem; font-family: 'Crimson Pro', serif; font-size: 1rem; transition: border-color 0.3s ease; }
-        .form-input:focus, .form-textarea:focus { outline: none; border-color: rgba(255,255,255,0.5); }
+        .form-input, .form-textarea, .form-select { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary); padding: 1rem; font-family: 'Crimson Pro', serif; font-size: 1rem; transition: border-color 0.3s ease; }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: rgba(255,255,255,0.5); }
+        .form-select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; cursor: pointer; }
+        .form-select option { background: #1a1a1a; color: var(--text-primary); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
         .form-textarea { min-height: 200px; resize: vertical; }
         
         .submit-button { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-primary); padding: 1rem 3rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; cursor: pointer; transition: all 0.3s ease; width: 100%; text-transform: uppercase; }
@@ -55,6 +59,14 @@
             .contact-form { padding: 2rem; }
         }
     </style>
+    <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -64,8 +76,10 @@
             <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">HOME</a>
-                <a href="index.html#portfolio" class="nav-link">PORTFOLIO</a>
-                <a href="index.html#services" class="nav-link">SERVICES</a>
+                <a href="portfolio.html" class="nav-link">PORTFOLIO</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="story.html" class="nav-link">STORY</a>
+                <a href="services.html" class="nav-link">SERVICES</a>
                 <a href="index.html#blog" class="nav-link">INSIGHTS</a>
                 <a href="contact.html" class="nav-link active">CONTACT</a>
             </div>
@@ -93,25 +107,60 @@
              4. Copy your form endpoint URL (looks like: https://formspree.io/f/xxxxxxxx)
              5. Replace the action URL below
         -->
+        <!-- IMPORTANT: Replace YOUR_FORMSPREE_URL_HERE — go to formspree.io, create a form, paste your endpoint -->
         <form class="contact-form" id="contactForm" action="https://formspree.io/f/YOUR_FORMSPREE_URL_HERE" method="POST">
-            <div class="form-group">
-                <label for="name" class="form-label">Your Name</label>
-                <input type="text" id="name" name="name" class="form-input" required placeholder="John Doe">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name" class="form-label">Your Name</label>
+                    <input type="text" id="name" name="name" class="form-input" required placeholder="Jane Smith">
+                </div>
+                <div class="form-group">
+                    <label for="email" class="form-label">Your Email</label>
+                    <input type="email" id="email" name="email" class="form-input" required placeholder="jane@company.com">
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="email" class="form-label">Your Email</label>
-                <input type="email" id="email" name="email" class="form-input" required placeholder="john@example.com">
+                <label for="project_type" class="form-label">Type of Project</label>
+                <select id="project_type" name="project_type" class="form-select" required>
+                    <option value="" disabled selected>Select a service...</option>
+                    <option value="Video Production">Video Production</option>
+                    <option value="Photography">Photography</option>
+                    <option value="Brand Strategy">Brand Strategy</option>
+                    <option value="Creative Direction">Creative Direction</option>
+                    <option value="Digital Design">Digital Design</option>
+                    <option value="Other">Other / Not Sure Yet</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="budget" class="form-label">Budget Range</label>
+                    <select id="budget" name="budget" class="form-select" required>
+                        <option value="" disabled selected>Select range...</option>
+                        <option value="Under $1k">Under $1,000</option>
+                        <option value="$1k-$5k">$1,000 – $5,000</option>
+                        <option value="$5k-$10k">$5,000 – $10,000</option>
+                        <option value="$10k-$25k">$10,000 – $25,000</option>
+                        <option value="$25k+">$25,000+</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timeline" class="form-label">Timeline</label>
+                    <select id="timeline" name="timeline" class="form-select" required>
+                        <option value="" disabled selected>Select timeline...</option>
+                        <option value="ASAP">ASAP</option>
+                        <option value="1 Month">Within 1 Month</option>
+                        <option value="2-3 Months">2 – 3 Months</option>
+                        <option value="3-6 Months">3 – 6 Months</option>
+                        <option value="Flexible">Flexible</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-group">
-                <label for="subject" class="form-label">Subject</label>
-                <input type="text" id="subject" name="subject" class="form-input" required placeholder="Project Inquiry">
-            </div>
-
-            <div class="form-group">
-                <label for="message" class="form-label">Message</label>
-                <textarea id="message" name="message" class="form-textarea" required placeholder="Tell us about your project..."></textarea>
+                <label for="message" class="form-label">Tell Us About Your Project</label>
+                <textarea id="message" name="message" class="form-textarea" required placeholder="Describe what you're working on, your goals, and anything else we should know..."></textarea>
             </div>
 
             <button type="submit" class="submit-button" id="submitBtn">Send Message</button>
@@ -152,7 +201,15 @@
         const successMessage = document.getElementById('successMessage');
 
         form.addEventListener('submit', function(e) {
-            // Don't prevent default - let Formspree handle it
+            // Fire GA4 lead event with qualifying data
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'generate_lead', {
+                    'event_category': 'contact_form',
+                    'event_label': document.getElementById('project_type').value,
+                    'budget': document.getElementById('budget').value,
+                    'timeline': document.getElementById('timeline').value
+                });
+            }
             submitBtn.disabled = true;
             submitBtn.textContent = 'SENDING...';
         });

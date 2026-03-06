@@ -256,6 +256,14 @@
             }
         }
     </style>
+    <!-- Google Analytics 4 — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -265,8 +273,10 @@
             <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">HOME</a>
-                <a href="index.html#portfolio" class="nav-link active">PORTFOLIO</a>
-                <a href="index.html#services" class="nav-link">SERVICES</a>
+                <a href="portfolio.html" class="nav-link">PORTFOLIO</a>
+                <a href="about.html" class="nav-link">ABOUT</a>
+                <a href="story.html" class="nav-link">STORY</a>
+                <a href="services.html" class="nav-link active">SERVICES</a>
                 <a href="index.html#blog" class="nav-link">INSIGHTS</a>
                 <a href="contact.html" class="nav-link">CONTACT</a>
             </div>

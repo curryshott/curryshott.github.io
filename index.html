@@ -1130,6 +1130,15 @@
         // Prevent scrolling on welcome page
         document.body.classList.add('no-scroll');
 
+        // Skip welcome screen when arriving via a hash link (e.g. index.html#blog)
+        // or navigating back from another page on the site
+        if (window.location.hash || (document.referrer && document.referrer.includes(window.location.hostname) && !document.referrer.endsWith('index.html') && !document.referrer.endsWith('/'))) {
+            document.body.classList.remove('no-scroll');
+            document.querySelector('.welcome-section').classList.add('hidden');
+            document.getElementById('mainNav').style.display = 'block';
+            setTimeout(() => { document.querySelector('.hero-text').classList.add('visible'); }, 100);
+        }
+
         // Smooth scroll for enter button and enable scrolling
         document.querySelector('.enter-link').addEventListener('click', function(e) {
             e.preventDefault();
